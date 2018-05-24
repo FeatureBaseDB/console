@@ -107,7 +107,7 @@ class REPL {
             }
         }
         else {
-            url = '/index/' + indexname + '/query'
+            url = 'http://localhost:10101/index/' + indexname + '/query'
             request = "POST"
             data = query
         }
@@ -226,7 +226,7 @@ class REPL {
 
     populate_index_dropdown() {
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/schema')
+      xhr.open('GET', 'http://localhost:10101/schema')
       var select = document.getElementById('index-dropdown')
 
       xhr.onload = function() {
@@ -249,7 +249,7 @@ class REPL {
 
 function populate_version() {
   var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/version')
+    xhr.open('GET', 'http://localhost:10101/version')
     var node = document.getElementById('server-version')
 
     xhr.onload = function() {
@@ -294,7 +294,7 @@ function set_active_pane_by_name(name) {
 
 function update_cluster_status() {
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/status')
+  xhr.open('GET', 'http://localhost:10101/status')
   xhr.onload = function() {
     var status = JSON.parse(xhr.responseText)
     render_status(status)
@@ -302,7 +302,7 @@ function update_cluster_status() {
   xhr.send(null)
 
   var xhrSchema = new XMLHttpRequest();
-  xhrSchema.open('GET', '/schema')
+  xhrSchema.open('GET', 'http://localhost:10101/schema')
   xhrSchema.onload = function() {
     var schema = JSON.parse(xhrSchema.responseText)
     render_schema(schema)
