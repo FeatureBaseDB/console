@@ -334,3 +334,12 @@ td{
   font-family: monospace;
 }
 
+#server-version {
+    padding: 10px;
+}
+#url-field {
+    text-align: right;
+}
+#url-label {
+    font-size: 10px;
+}

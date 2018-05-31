@@ -107,7 +107,7 @@ class REPL {
             }
         }
         else {
-            url = 'http://localhost:10101/index/' + indexname + '/query'
+            url = pilosaURL + 'index/' + indexname + '/query'
             request = "POST"
             data = query
         }
@@ -226,7 +226,7 @@ class REPL {
 
     populate_index_dropdown() {
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'http://localhost:10101/schema')
+      xhr.open('GET', pilosaURL + 'schema')
       var select = document.getElementById('index-dropdown')
 
       xhr.onload = function() {
@@ -247,9 +247,36 @@ class REPL {
 
 }
 
+function validURL(url) {
+    var pattern = new RegExp('^(https?:\/\/)?' + // protocol
+        '((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|' + // domain name
+        '((\d{1,3}\.){3}\d{1,3}))' + // or ip (v4) address
+        '(\:\d+)?(\/[-a-z\d%_.~+]*)*') // port and path
+    if(!pattern.test(url)) {
+        return false;
+    } else {
+        if (url.slice(-1) != '/') {
+            url += '/';
+        }
+        return url;
+    }
+}
+
+
+function getURL() {
+    var url = document.getElementById("url").value
+    url = validURL(url)
+    if (!url) {
+        alert("invalid: " + url)
+    }
+    return url
+}
+
+var pilosaURL = getURL()
+
 function populate_version() {
   var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:10101/version')
+    xhr.open('GET', pilosaURL + 'version')
     var node = document.getElementById('server-version')
 
     xhr.onload = function() {
@@ -294,7 +321,7 @@ function set_active_pane_by_name(name) {
 
 function update_cluster_status() {
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'http://localhost:10101/status')
+  xhr.open('GET', pilosaURL + 'status')
   xhr.onload = function() {
     var status = JSON.parse(xhr.responseText)
     render_status(status)
@@ -302,7 +329,7 @@ function update_cluster_status() {
   xhr.send(null)
 
   var xhrSchema = new XMLHttpRequest();
-  xhrSchema.open('GET', 'http://localhost:10101/schema')
+  xhrSchema.open('GET', pilosaURL + 'schema')
   xhrSchema.onload = function() {
     var schema = JSON.parse(xhrSchema.responseText)
     render_schema(schema)
@@ -510,6 +537,12 @@ repl.bind_events()
 input.focus()
 
 check_anchor_uri()
+
+document.getElementById("connect").onclick = function() {
+    pilosaURL = getURL()
+    populate_version()
+    repl.populate_index_dropdown()
+}
 
 function isJSON(str) {
     try {
