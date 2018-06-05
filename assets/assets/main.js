@@ -126,6 +126,7 @@ class REPL {
                 "querytime_ms": end_time - start_time,
             });
         };
+        xhr.onreadystatechange = checkConnection
 
         xhr.send(data);
         // Remove index from dropdown with delete index command
@@ -242,6 +243,7 @@ class REPL {
           select.value = 1;
         }
       }
+      xhr.onreadystatechange = checkConnection
       xhr.send(null)
     }
 
@@ -262,7 +264,6 @@ function validURL(url) {
     }
 }
 
-
 function getURL() {
     var url = document.getElementById("url").value
     url = validURL(url)
@@ -274,10 +275,15 @@ function getURL() {
 
 var pilosaURL = getURL()
 
+function setStatus(value) {
+    console.log("set status " + value)
+    var node = document.getElementById('status-line')
+    node.innerHTML = value
+}
+
 function populate_version() {
-  var xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
     xhr.open('GET', pilosaURL + 'version')
-    var node = document.getElementById('server-version')
 
     xhr.onload = function() {
       var version = JSON.parse(xhr.responseText)['version']
@@ -286,9 +292,16 @@ function populate_version() {
       doc_link.onclick = function() {
         window.open('https://www.pilosa.com/docs/v' + version_major_minor + '/introduction/')
       }
-      node.innerHTML = "Pilosa v" + version
+      setStatus("Connected to Pilosa v" + version)
     }
+    xhr.onreadystatechange = checkConnection
     xhr.send(null)
+}
+
+function checkConnection() {
+    if (this.status === 0) {
+        setStatus("<span style=\"color: red;\">Connection Error!</span>")
+    }
 }
 
 function handle_nav_click(e) {
@@ -326,6 +339,7 @@ function update_cluster_status() {
     var status = JSON.parse(xhr.responseText)
     render_status(status)
   }
+  xhr.onreadystatechange = checkConnection
   xhr.send(null)
 
   var xhrSchema = new XMLHttpRequest();
@@ -334,6 +348,7 @@ function update_cluster_status() {
     var schema = JSON.parse(xhrSchema.responseText)
     render_schema(schema)
   }
+  xhrSchema.onreadystatechange = checkConnection
   xhrSchema.send(null)
 }
 
@@ -538,11 +553,16 @@ input.focus()
 
 check_anchor_uri()
 
-document.getElementById("connect").onclick = function() {
+function updateURL() {    
     pilosaURL = getURL()
     populate_version()
     repl.populate_index_dropdown()
 }
+
+document.getElementById("url-form").addEventListener('submit', function(e) {
+    e.preventDefault()
+    updateURL()
+})
 
 function isJSON(str) {
     try {
