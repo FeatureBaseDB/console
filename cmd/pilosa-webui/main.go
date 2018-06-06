@@ -17,7 +17,7 @@ var bind = flag.String("bind", ":8000", "bind address")
 func main() {
 	var port string
 	flag.Parse()
-	re := regexp.MustCompile(".*:(\\d{1,5})$")
+	re := regexp.MustCompile(":(\\d{1,5})$")
 	match := re.FindStringSubmatch(*bind)
 	if len(match) == 2 {
 		port = match[1]
