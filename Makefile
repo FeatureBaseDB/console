@@ -1,7 +1,14 @@
-.PHONY: server install-statik generate install run build release-build release check-clean
+.PHONY: server install-statik generate install run build release-build release check-clean clean
 
 VERSION = $(shell git describe --tags 2> /dev/null || echo unknown)
 VERSION_ID = $(VERSION)-$(GOOS)-$(GOARCH)
+
+clean:
+	rm -rf vendor build
+
+vendor: Gopkg.toml
+	dep ensure
+	touch vendor
 
 server:
 	cd assets && python -m SimpleHTTPServer
@@ -12,13 +19,13 @@ install-statik:
 generate:
 	go generate github.com/pilosa/webui/pkg/static
 
-install:
+install: generate
 	go install github.com/pilosa/webui/cmd/pilosa-webui
 
-run:
+run: generate
 	go run cmd/pilosa-webui/main.go
 
-build:
+build: generate
 	go build $(FLAGS) ./cmd/pilosa-webui
 
 release-build:
