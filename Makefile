@@ -41,5 +41,5 @@ release: check-clean
 
 check-clean:
 ifndef SKIP_CHECK_CLEAN
-        $(if $(shell git status --porcelain),$(error Git status is not clean! Please commit or checkout/reset changes.))
+	$(if $(shell git status --porcelain),$(error Git status is not clean! Please commit or checkout/reset changes.))
 endif
