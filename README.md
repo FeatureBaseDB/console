@@ -21,3 +21,7 @@ Start a basic development server with:
 ```
 make server
 ```
+
+## License
+
+Pilosa WebUI is license under the GNU Affero General Public License. A copy of the license is included in `COPYING`.
