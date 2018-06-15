@@ -2,6 +2,7 @@
 
 VERSION = $(shell git describe --tags 2> /dev/null || echo unknown)
 VERSION_ID = $(VERSION)-$(GOOS)-$(GOARCH)
+PKG = github.com/pilosa/webui
 
 clean:
 	rm -rf vendor build
@@ -16,17 +17,17 @@ server:
 install-statik:
 	go get -u github.com/rakyll/statik
 
-generate:
-	go generate github.com/pilosa/webui/pkg/static
+generate: vendor
+	go generate $(PKG)/pkg/static
 
-install: generate
-	go install github.com/pilosa/webui/cmd/pilosa-webui
+install: vendor generate
+	go install $(PKG)/cmd/pilosa-webui
 
-run: generate
-	go run cmd/pilosa-webui/main.go
+run: vendor generate
+	go run $(PKG)/cmd/pilosa-webui/main.go
 
-build: generate
-	go build $(FLAGS) ./cmd/pilosa-webui
+build: vendor generate
+	go build $(FLAGS) $(PKG)/cmd/pilosa-webui
 
 release-build:
 	$(MAKE) build FLAGS="-o build/pilosa-webui-$(VERSION_ID)/pilosa-webui"
