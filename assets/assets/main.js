@@ -529,11 +529,11 @@ class Autocompleter {
   }
 
   add_keyword() {
-    // call when index or frame created in webui
+    // call when index or frame created in console
   }
 
   remove_keyword() {
-    // call when index or frame deleted in webui
+    // call when index or frame deleted in console
     // issue: if e.g. multiple indexes have same frame, removing one removes all.
     // solution: maintain count. requires more elaborate representation of keywords.
   }

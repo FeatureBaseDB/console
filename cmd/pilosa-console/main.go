@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/rakyll/statik/fs"
 
-	_ "github.com/pilosa/webui/pkg/static/statik"
+	_ "github.com/pilosa/console/pkg/static/statik"
 )
 
 var bind = flag.String("bind", ":8000", "bind address")
@@ -33,7 +33,7 @@ func main() {
 
 	http.Handle("/", http.FileServer(statikFS))
 
-	log.Println("Serving Pilosa WebUI at " + webAddress)
+	log.Println("Serving Pilosa Console at " + webAddress)
 	err = http.ListenAndServe(*bind, nil)
 	if err != nil {
 		log.Fatal(errors.Wrap(err, "running ListenAndServe"))

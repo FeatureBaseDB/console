@@ -2,7 +2,7 @@
 
 VERSION = $(shell git describe --tags 2> /dev/null || echo unknown)
 VERSION_ID = $(VERSION)-$(GOOS)-$(GOARCH)
-PKG = github.com/pilosa/webui
+PKG = github.com/pilosa/console
 
 clean:
 	rm -rf vendor build
@@ -21,19 +21,19 @@ generate: vendor
 	go generate $(PKG)/pkg/static
 
 install: vendor generate
-	go install $(PKG)/cmd/pilosa-webui
+	go install $(PKG)/cmd/pilosa-console
 
 run: vendor generate
-	go run $(PKG)/cmd/pilosa-webui/main.go
+	go run $(PKG)/cmd/pilosa-console/main.go
 
 build: vendor generate
-	go build $(FLAGS) $(PKG)/cmd/pilosa-webui
+	go build $(FLAGS) $(PKG)/cmd/pilosa-console
 
 release-build:
-	$(MAKE) build FLAGS="-o build/pilosa-webui-$(VERSION_ID)/pilosa-webui"
-	cp COPYING README.md build/pilosa-webui-$(VERSION_ID)
-	tar -cvz -C build -f build/pilosa-webui-$(VERSION_ID).tar.gz pilosa-webui-$(VERSION_ID)/
-	@echo Created release build: build/pilosa-webui-$(VERSION_ID).tar.gz
+	$(MAKE) build FLAGS="-o build/pilosa-console-$(VERSION_ID)/pilosa-console"
+	cp COPYING README.md build/pilosa-console-$(VERSION_ID)
+	tar -cvz -C build -f build/pilosa-console-$(VERSION_ID).tar.gz pilosa-console-$(VERSION_ID)/
+	@echo Created release build: build/pilosa-console-$(VERSION_ID).tar.gz
 
 release: check-clean
 	$(MAKE) release-build GOOS=darwin GOARCH=amd64
