@@ -603,10 +603,10 @@ function parse_query(query, indexname) {
             }
             switch (command_type){
                 case "index":
-                    parsed_query["url"] =  '/index/' + command_name;
+                    parsed_query["url"] =  getURL() + 'index/' + command_name;
                     break;
                 case "frame":
-                    parsed_query["url"] =  '/index/' + indexname + '/frame/' + command_name;
+                    parsed_query["url"] =  getURL() + 'index/' + indexname + '/frame/' + command_name;
                     break
             }
             break;
@@ -614,11 +614,11 @@ function parse_query(query, indexname) {
             parsed_query["request"] = "DELETE";
             switch (command_type){
                 case "index":
-                    parsed_query["url"] =  '/index/' + command_name;
+                    parsed_query["url"] =  getURL() + 'index/' + command_name;
                     parsed_query["data"] = "";
                     break;
                 case "frame":
-                    parsed_query["url"] =  '/index/' + indexname + '/frame/' + command_name;
+                    parsed_query["url"] =  getURL() + 'index/' + indexname + '/frame/' + command_name;
                     parsed_query["data"] = "";
                     break;
             }
